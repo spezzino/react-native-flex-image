@@ -23,6 +23,8 @@ type Props = {
   onPress?: () => void,
   thumbnail?: number | { uri: string, width?: number, height?: number },
   loadingMethod?: 'spinner' | 'progressive',
+  onLoadStart?: () => void,
+  onLoadEnd?: () => void,
 };
 
 type State = {
@@ -39,10 +41,11 @@ export default class FlexImage extends Component<Props, State> {
     super(props, ...args);
     autobind(this);
 
-    let {source, thumbnail, loadingMethod} = props;
+    let {source, thumbnail, loadingMethod, onLoadStart, onLoadEnd} = props;
     let ratio;
     let error;
     let isLoading = true;
+    onLoadStart();
 
     let src = thumbnail && loadingMethod === 'progressive' ? thumbnail : source;
     if (typeof src === 'number') {
@@ -56,6 +59,7 @@ export default class FlexImage extends Component<Props, State> {
         error = 'Error: Failed to retrieve width and height of the image';
       }
       isLoading = false;
+      onLoadEnd();
     } else {
       this._pendingGetSize = getImageSize(
         src,
@@ -169,6 +173,7 @@ export default class FlexImage extends Component<Props, State> {
       isLoading: false,
       ratio,
     });
+    this.props.onLoadEnd();
   }
 
   _onLoadFail(error: Error) {
@@ -176,6 +181,7 @@ export default class FlexImage extends Component<Props, State> {
       isLoading: false,
       error: 'Error: ' + error.message,
     });
+    this.props.onLoadEnd();
   }
 }
 

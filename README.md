@@ -131,6 +131,13 @@ function App() {
 |**`thumbnail`**|optional|source of the thumbnail|*None*|
 |**`loadingMethod`**|optional|enum for select loading method, using `indicator` or `progressive`|`indicator`|
 
+## Methods
+
+| Method | Description |
+|---|---|
+|**onLoadStart**|fired when the image starts loading|
+|**onLoadEnd**|fired when the image finish loading|
+
 
 ## License
 
